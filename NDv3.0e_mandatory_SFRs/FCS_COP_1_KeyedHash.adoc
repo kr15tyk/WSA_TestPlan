@@ -1,0 +1,4 @@
+=== FCS_COP.1/KeyedHash Cryptographic Operation (Keyed Hash Algorithm)
+
+For each of the supported parameter sets, the evaluator shall compose 15 sets of test data. Each set shall consist of a key and message data. The evaluator shall have the TSF generate HMAC tags for these sets of test data. The resulting MAC tags shall be compared to the result of generating HMAC tags with the same key and message data using a known good implementation. +
+

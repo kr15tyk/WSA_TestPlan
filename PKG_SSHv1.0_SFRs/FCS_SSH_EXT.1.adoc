@@ -1,0 +1,84 @@
+=== FCS_SSH_EXT.1 SSH Protocol
+
+*FCS_SSH_EXT.1.1*
+
+There are no test evaluation activities for this component. This SFR is evaluated by activities for other SFRs.
+
+*FCS_SSH_EXT.1.2*
+
+*Test 1:* [conditional] If the TOE is acting as SSH Server:
+
+.. The evaluator shall use a suitable SSH Client to connect to the TOE, enable debug messages in the SSH Client, and examine the debug messages to determine that only the configured authentication methods for the TOE were offered by the server.
+        
+.. [conditional] If the SSH server supports X509 based Client authentication options:
+
+... The evaluator shall initiate an SSH session from a client where the username is associated with the X509 certificate. The evaluator shall verify the session is successfully established.
+
+... Next the evaluator shall use the same X509 certificate as above but include a username not associated with the certificate. The evaluator shall verify that the session does not establish.
+
+... Finally, the evaluator shall use the correct username (from step a above) but use a different X509 certificate which is not associated with the username. The evaluator shall verify that the session does not establish.
+
+*Test 2:* [conditional] If the TOE is acting as SSH Client, the evaluator shall test for a successful configuration setting of each authentication method as follows:
+        
+.. The evaluator shall initiate a SSH session using the authentication method configured and verify that the session is successfully established.
+        
+.. Next, the evaluator shall use bad authentication data (e.g. incorrectly generated certificate or incorrect password) and ensure that the connection is rejected.
+
+Steps a-b shall be repeated for each independently configurable authentication method supported by the server.
+    
+*Test 3:* [conditional] If the TOE is acting as SSH Client, the evaluator shall verify that the connection fails upon configuration mismatch as follows:
+
+.. The evaluator shall configure the Client with an authentication method not supported by the Server.
+
+.. The evaluator shall verify that the connection fails.
+
+If the Client supports only one authentication method, the evaluator can test this failure of connection by configuring the Server with an authentication method not supported by the Client. In order to facilitate this test, it is acceptable for the evaluator to configure an authentication method that is outside of the selections in the SFR.
+
+*FCS_SSH_EXT.1.3*
+
+*Test 1:* The evaluator shall demonstrate that the TOE accepts the maximum allowed packet size.
+    
+*Test 2:* This test is performed to verify that the TOE drops packets that are larger than size specified in the component.
+
+.. The evaluator shall establish a successful SSH connection with the peer.
+
+.. Next the evaluator shall craft a packet that is one byte larger than the maximum size specified in this component and send it through the established SSH connection to the TOE.
+
+.. Evaluator shall verify that the packet was dropped by the TOE by reviewing the TOE audit log for a dropped packet audit.
+
+*FCS_SSH_EXT.1.4*
+
+The evaluator shall perform the following tests:
+
+If the TOE can be both a client and a server, these tests must be performed for both roles.
+
+*Test 1:* The evaluator must ensure that only claimed algorithms and cryptographic primitives are used to establish an SSH connection. To verify this, the evaluator shall establish an SSH connection with a remote endpoint. The evaluator shall capture the traffic exchanged between the TOE and the remote endpoint during protocol negotiation (e.g. using a packet capture tool or information provided by the endpoint, respectively). The evaluator shall verify from the captured traffic that the TOE offers only the algorithms defined in the ST for the TOE for SSH connections. The evaluator shall perform one successful negotiation of an SSH connection and verify that the negotiated algorithms were included in the advertised set. If the evaluator detects that not all algorithms defined in the ST for SSH are advertised by the TOE or the TOE advertises additional algorithms not defined in the ST for SSH, the test shall be regarded as failed.
+
+The data collected from the connection above shall be used for verification of the advertised hashing and shared secret establishment algorithms in FCS_SSH_EXT.1.5 and FCS_SSH_EXT.1.6 respectively.
+
+*Test 2:* For the connection established in Test 1, the evaluator shall terminate the connection and observe that the TOE terminates the connection.
+
+*Test 3:* The evaluator shall configure the remote endpoint to only allow a mechanism that is not included in the ST selection. The evaluator shall attempt to connect to the TOE and observe that the attempt fails.
+
+*FCS_SSH_EXT.1.5*
+
+*Test 1:* The evaluator shall use the test data collected in FCS_SSH_EXT.1.4, Test 1 to verify that appropriate mechanisms are advertised.
+
+*Test 2:* The evaluator shall configure an SSH peer to allow only a hashing algorithm that is not included in the ST selection. The evaluator shall attempt to establish an SSH connection and observe that the connection is rejected.
+
+*FCS_SSH_EXT.1.6*
+
+*Test 1:* The evaluator shall use the test data collected in FCS_SSH_EXT.1.4, Test 1 to verify that appropriate mechanisms are advertised.
+
+*Test 2:* The evaluator shall configure an SSH peer to allow only a key exchange method that is not included in the ST selection. The evaluator shall attempt to establish an SSH connection and observe that the connection is rejected.
+
+*FCS_SSH_EXT.1.8*
+
+The test harness needs to be configured so that its connection rekey or termination limits are greater than the limits supported by the TOE -- it is expected that the test harness should not be initiating the connection rekey or termination.
+
+*Test 1:* Establish an SSH connection. Wait until the identified connection rekey limit is met. Observed that a connection rekey or termination is initiated. This may require traffic to periodically be sent, or connection keep alive to be set, to ensure that the connection is not closed due to an idle timeout.
+
+*Test 2:* Establish an SSH connection. Transmit data from the TOE until the identified connection rekey or termination limit is met. Observe that a connection rekey or termination is initiated.
+
+*Test 3:* Establish an SSH connection.  Send data to the TOE until the identified connection rekey limit or termination is met.  Observe that a connection rekey or termination is initiated. +
+

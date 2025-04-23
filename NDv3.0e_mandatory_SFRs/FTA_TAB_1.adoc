@@ -1,0 +1,6 @@
+=== FTA_TAB.1 Default TOE Access Banners
+
+The evaluator shall also perform the following test:
+
+*Test 1:* The evaluator shall follow the guidance documentation to configure a notice and consent warning message. The evaluator shall then, for each method of access specified in the TSS, establish a session with the TOE. The evaluator shall verify that the notice and consent warning message is displayed in each instance. +
+

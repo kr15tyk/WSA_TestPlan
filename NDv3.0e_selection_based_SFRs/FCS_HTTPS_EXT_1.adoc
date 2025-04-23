@@ -1,0 +1,8 @@
+=== FCS_HTTPS_EXT.1 HTTPS Protocol
+
+This test is now performed as part of FIA_X509_EXT.1/Rev testing.
+
+Tests are performed in conjunction with the TLS evaluation activities.
+
+If the TOE is an HTTPS client or an HTTPS server utilizing X.509 client authentication, then the certificate validity shall be tested in accordance with testing performed for FIA_X509_EXT.1. +
+

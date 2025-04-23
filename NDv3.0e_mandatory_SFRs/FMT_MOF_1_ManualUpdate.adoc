@@ -1,0 +1,8 @@
+=== FMT_MOF.1/ManualUpdate Management of Security Functions Behaviour
+
+The evaluator shall perform the following tests:
+
+*Test 1:* The evaluator shall try to perform the update using a legitimate update image without prior authentication as Security Administrator (either by authentication as a user with no administrator privileges or without user authentication at all – depending on the configuration of the TOE). The attempt to update the TOE shall fail.
+
+*Test 2:* The evaluator shall try to perform the update with prior authentication as Security Administrator using a legitimate update image. This attempt should be successful. This test case should be covered by the tests for FPT_TUD_EXT.1 already. +
+

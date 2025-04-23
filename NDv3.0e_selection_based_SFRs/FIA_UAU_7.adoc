@@ -1,0 +1,6 @@
+=== FIA_UAU.7 Protected Authentication Feedback
+
+The evaluator shall perform the following test for each method of local login allowed:
+
+*Test 1:* The evaluator shall locally authenticate to the TOE. While making this attempt, the evaluator shall verify that at most obscured feedback is provided while entering the authentication information. +
+

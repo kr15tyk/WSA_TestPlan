@@ -1,0 +1,8 @@
+=== FMT_MTD.1/CryptoKeys Management of TSF Data
+
+The evaluator shall perform the following tests:
+
+*Test 1:* The evaluator shall try to perform at least one of the related actions (modify, delete, generate/import) without prior authentication as Security Administrator (either by authentication as a non-administrative user, if supported, or without authentication at all). Attempts to perform related actions without prior authentication should fail. According to the implementation no other users than the Security Administrator might be defined and without any user authentication the user might not be able to get to the point where the attempt to manage cryptographic keys can be executed. In that case it shall be demonstrated that access control mechanisms prevent execution up to the step that can be reached without authentication as Security Administrator.
+
+*Test 2:* The evaluator shall try to perform at least one of the related actions with prior authentication as Security Administrator. This attempt should be successful. +
+

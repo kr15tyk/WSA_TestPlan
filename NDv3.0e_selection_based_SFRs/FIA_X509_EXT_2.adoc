@@ -1,0 +1,6 @@
+=== FIA_X509_EXT.2 X.509 Certificate Authentication
+
+The evaluator shall perform the following test for each trusted channel:
+
+*Test 1:* The evaluator shall demonstrate that using a valid certificate that requires certificate validation checking to be performed in at least some part by communicating with a non-TOE IT entity. The evaluator shall then manipulate the environment so that the TOE is unable to verify the validity of the certificate and observe that the action selected in FIA_X509_EXT.2.2 is performed. If the selected action is administrator-configurable, then the evaluator shall follow the guidance documentation to determine that all supported administrator-configurable options behave in their documented manner. +
+

@@ -1,0 +1,12 @@
+:toc:
+:toclevels: 2
+
+= Testplan for NDcPPv3.0e
+:toc: preamble
+
+This testplan includes the test cases a Network Device will need to pass in order to be certified under the https://github.com/ND-iTC/Documents/blob/main/NDcPP_v3_0e.adoc[collaborative Protection Profile for Network Devices Version 3.0e (NDcPPv3.0e)].
+
+The testcases below are taken from the https://github.com/ND-iTC/Documents/blob/main/ND_Supporting_Document_3_0e.adoc[Network Device Supporting Document Version 3.0e (NDSDv3.0e)] which defines the Evaluation Activities associated with the Security Functional Requirements (SFR) in the NDcPP.
+
+== Mandatory SRFs +
+

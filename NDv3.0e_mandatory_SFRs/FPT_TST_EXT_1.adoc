@@ -1,0 +1,18 @@
+=== FPT_TST_EXT.1 TSF Testing
+
+It is expected that at least the following tests are performed:
+
+.. Verification of the integrity of the firmware and executable software of the TOE
+
+.. Verification of the correct operation of the cryptographic functions necessary to fulfil any of the SFRs.
+
+Although formal compliance is not mandated, the self-tests performed should aim for a level of confidence comparable to:
+
+.. [FIPS 140-2], Section 4.9.1, Software/firmware integrity test for the verification of the integrity of the firmware and executable software. Note that the testing is not restricted to the cryptographic functions of the TOE.
+
+.. [FIPS 140-2], Section 4.9.1, Cryptographic algorithm test for the verification of the correct operation of cryptographic functions. Alternatively, national requirements of any CCRA member state for the security evaluation of cryptographic functions should be considered as appropriate.
+
+The evaluator shall either verify that the self-tests described above are carried out during initial start-up or that the developer has justified any deviation from this.
+
+For distributed TOEs the evaluator shall perform testing of self-tests on all TOE components according to the description in the TSS about which self-test are performed by which component. +
+

@@ -1,0 +1,6 @@
+=== FTA_SSL.3 TSF-Initiated Termination
+
+For each method of remote administration, the evaluator shall perform the following test:
+
+*Test 1:* The evaluator shall follow the guidance documentation to configure several different values for the inactivity time period referenced in the component. For each period configured, the evaluator shall establish a remote interactive session with the TOE. The evaluator shall then observe that the session is terminated after the configured time period. +
+

@@ -1,0 +1,8 @@
+=== FIA_X509_EXT.3 X509 Certificate Requests
+
+The evaluator shall perform the following tests:
+
+*Test 1:* The evaluator shall use the guidance documentation to cause the TOE to generate a Certification Request. The evaluator shall capture the generated message and ensure that it conforms to the format specified. The evaluator shall confirm that the Certification Request provides the public key and other required information, including any necessary user-input information.
+
+*Test 2:* The evaluator shall demonstrate that validating a response message to a Certification Request without a valid certification path results in the function failing. The evaluator shall then load a certificate or certificates as trusted CAs needed to validate the certificate response message and demonstrate that the function succeeds. +
+

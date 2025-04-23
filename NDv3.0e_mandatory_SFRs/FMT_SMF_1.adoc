@@ -1,0 +1,4 @@
+=== FMT_SMF.1 Specification of Management Functions
+
+The evaluator shall test management functions as part of testing the SFRs identified in section 2.4.4. No separate testing for FMT_SMF.1 is required unless one of the management functions in FMT_SMF.1.1 has not already been exercised under any other SFR. +
+

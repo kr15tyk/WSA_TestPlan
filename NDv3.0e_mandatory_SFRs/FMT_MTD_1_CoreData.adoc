@@ -1,0 +1,4 @@
+=== FMT_MTD_1/CoreData Management of TSF Data
+
+No separate testing for FMT_MTD.1/CoreData is required unless one of the management functions has not already been exercised under any other SFR. +
+

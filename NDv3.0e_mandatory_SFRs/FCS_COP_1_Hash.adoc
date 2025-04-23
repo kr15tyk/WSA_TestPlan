@@ -1,0 +1,26 @@
+=== FCS_COP.1/Hash Cryptographic Operation (Hash Algorithm)
+
+The TSF hashing functions can be implemented in one of two modes. The first mode is the byte­oriented mode. In this mode the TSF only hashes messages that are an integral number of bytes in length; i.e., the length (in bits) of the message to be hashed is divisible by 8. The second mode is the bit­oriented mode. In this mode the TSF hashes messages of arbitrary length. As there are different tests for each mode, an indication is given in the following sections for the bit­oriented vs. the byte­oriented testmacs.
+
+The evaluator shall perform all of the following tests for each hash algorithm implemented by the TSF and used to satisfy the requirements of this PP.
+
+*Short Messages Test- ­ Bit­-oriented Mode*
+
+The evaluators shall devise an input set consisting of m+1 messages, where m is the block length of the hash algorithm. The length of the messages range sequentially from 0 to m bits. The message text shall be pseudorandomly generated. The evaluators shall compute the message digest for each of the messages and ensure that the correct result is produced when the messages are provided to the TSF.
+
+*Short Messages Test- ­ Byte­-oriented Mode*
+
+The evaluators shall devise an input set consisting of m/8+1 messages, where m is the block length of the hash algorithm. The length of the messages range sequentially from 0 to m/8 bytes, with each message being an integral number of bytes. The message text shall be pseudorandomly generated. The evaluators compute the message digest for each of the messages and ensure that the correct result is produced when the messages are provided to the TSF.
+
+*Selected Long Messages Test- ­ Bit­-oriented Mode*
+
+The evaluators shall devise an input set consisting of m messages, where m is the block length of the hash algorithm (e.g. 512 bits for SHA-256). The length of the ith message is m + 99*i, where 1 ≤ i ≤ m. The message text shall be pseudorandomly generated. The evaluators compute the message digest for each of the messages and ensure that the correct result is produced when the messages are provided to the TSF.
+
+*Selected Long Messages Test- ­ Byte­-oriented Mode*
+
+The evaluators shall devise an input set consisting of m/8 messages, where m is the block length of the hash algorithm (e.g. 512 bits for SHA-256). The length of the ith message is m + 8*99*i, where 1 ≤ i ≤ m/8. The message text shall be pseudorandomly generated. The evaluators compute the message digest for each of the messages and ensure that the correct result is produced when the messages are provided to the TSF.
+
+*Pseudorandomly Generated Messages Test*
+
+This test is for byte­oriented implementations only. The evaluators shall randomly generate a seed that is n bits long, where n is the length of the message digest produced by the hash function to be tested. The evaluators then formulate a set of 100 messages and associated digests by following the algorithm provided in Figure 1 of [SHAVS]. The evaluators then ensure that the correct result is produced when the messages are provided to the TSF. +
+

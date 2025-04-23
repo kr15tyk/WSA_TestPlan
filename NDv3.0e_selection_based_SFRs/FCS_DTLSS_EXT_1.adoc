@@ -1,0 +1,117 @@
+=== FCS_DTLSS_EXT.1 DTLS Server Protocol
+
+For clarification: For DTLS communication packets might be received in a different order than sent due to the use of the UDP protocol. All tests requiring a specific order of test steps ("before", "after") are therefore referring to the sequence numbering of DTLS packets.
+
+*FCS_DTLSS_EXT.1.1*
+
+The evaluator shall perform the following tests:
+
+*Test 1:* The evaluator shall establish a DTLS connection using each of the ciphersuites specified by the requirement. This connection may be established as part of the establishment of a higher-level application protocol, e.g., as part of a syslog session. It is sufficient to observe the successful negotiation of a ciphersuite to satisfy the intent of the test; it is not necessary to examine the characteristics of the encrypted traffic in an attempt to discern the ciphersuite being used (for example, that the cryptographic algorithm is 128-bit AES and not 256-bit AES).
+
+*Test 2:* The evaluator shall perform the following tests:
+
+The evaluator shall send a Client Hello to the server with a list of ciphersuites that does not contain any of the ciphersuites in the server’s ST and verify that the server denies the connection.
+... [conditional]: Perform this test only if support of DTLS 1.2 is claimed. The evaluator shall send a Client Hello to the server containing only the TLS_NULL_WITH_NULL_NULL ciphersuite and verify that the server denies the connection.
+
+*Test 3:* The evaluator shall perform the following modifications to the traffic:
+
+... [conditional]: Perform this test only if support of DTLS 1.2 is claimed. Modify a byte in the Client Finished handshake message and verify that the server rejects the connection and does not send any application data.
+... (The intent of this test is to ensure that the server's DTLS implementation immediately makes use of the key exchange and authentication algorithms to: a) Correctly encrypt DTLS Finished message and b) Encrypt every DTLS message after session keys are negotiated.)
++
+[conditional]: Perform this test only if support of DTLS 1.2 is claimed. The evaluator shall use one of the claimed ciphersuites to complete a successful handshake and observe transmission of properly encrypted application data. The evaluator shall verify that no Alert with alert level Fatal (2) messages were sent.
++
+The evaluator shall verify that the Finished message (Content type hexadecimal 16 and handshake message type hexadecimal 14) is sent immediately after the server's ChangeCipherSpec (Content type hexadecimal 14) message. The evaluator shall examine the Finished message (encrypted example in hexadecimal of a TLS record containing a Finished message, 16 03 03 00 40 11 22 33 44 55...) and confirm that it does not contain unencrypted data (unencrypted example in hexadecimal of a DTLS record containing a Finished message, 16 03 03 00 40 14 00 00 0c...), by verifying that the first byte of the encrypted Finished message does not equal hexadecimal 14 for at least one of three test messages. There is a chance that an encrypted Finished message contains a hexadecimal value of '14' at the position where a plaintext Finished message would contain the message type code '14'. If the observed Finished message contains a hexadecimal value of '14' at the position where the plaintext Finished message would contain the message type code, the test shall be repeated three times in total. In case the value of '14' can be observed in all three tests it can be assumed that the Finished message has indeed been sent in plaintext and the test has to be regarded as 'failed'. Otherwise it has to be assumed that the observation of the value '14' has been due to chance and that the Finished message has indeed been sent encrypted. In that latter case the test shall be regarded as 'passed'.
+... [conditional]: Perform this test only if support of DTLS 1.3 is claimed. The evaluator shall use a client to send a Client Hello message containing a single curve in the Supported Groups extension. The curve that is selected to be presented in this extension should not be supported by the TOE. The evaluator shall verify that the TOE disconnects after receiving the Client Hello message.
+... [conditional]: Perform this test only if support of DTLS 1.3 is claimed. The evaluator shall use a client to send a Client Hello message containing multiple curves in the Supported Groups extension. These curves should be chosen such that only one of these curves is supported by the TOE. The evaluator shall verify that the TOE responds with a Hello Retry Request message selecting the supported curve. This shall be reflected in the Key Share extension of the Hello Retry Request message.
+
+*Test 4:* The evaluator shall attempt to establish a DTLS connection using each of the supported DTLS versions (i.e., DTLS 1.3, DTLS 1.2). The client shall be configured so it only supports the version being tested. The evaluator shall verify that the versions specified in FCS_DTLSS_EXT.1.1 are successfully established and all other versions not successfully established. If the TOE attempts to downgrade the version, it is acceptable for the test client to terminate the connection; however, the version selected by the TOE shall always be a version specified in FCS_DTLSS_EXT.1.1.
+
+*FCS_DTLSS_EXT.1.2*
+
+The DTLS server shall present a HelloRetryRequest message (DTLS 1.3)/ HelloVerify message (DTLS 1.2) containing a cookie. In the subsequent client hello message sent by the client to the server, the evaluator shall modify at least one byte in the cookie message and verify that the Server rejects the Client’s handshake message.
+
+*FCS_DTLSS_EXT.1.3 and FCS_DTLSS_EXT.1.4*
+
+The evaluator shall perform the following tests:
+
+*Test 1 [conditional]:* If ECDHE ciphersuites/groups are supported:
+
+... The evaluator shall repeat this test for each supported elliptic curve. The evaluator shall attempt a connection using a supported ECDHE ciphersuite (DTLS 1.2) or group (DTLS 1.3) and a single supported elliptic curve specified in the supported groups extension. The evaluator shall verify (through a packet capture or instrumented client) that the TOE selects the same curve in the Server Key Exchange (DTLS 1.2) or Server Hello (key_share, for DTLS 1.3) message and successfully establishes the connection.
+... The evaluator shall attempt a connection using a supported_groups extension containing a single unsupported elliptic curve (e.g. secp192r1 (0x13)). Note: For DTLS 1.2 connections, a single supported ECDHE ciphersuite shall be proposed. The evaluator shall verify that the TOE does not send a Server Hello message and the connection is not successfully established.
+
+*Test 2 [conditional]:* If DHE ciphersuites are supported, the evaluator shall repeat the following test for each supported parameter size. If any configuration is necessary, the evaluator shall configure the TOE to use a supported Diffie-Hellman parameter size. The evaluator shall attempt a connection using a supported DHE ciphersuite.
+
+* For DTLS 1.2, the evaluator shall verify (through a packet capture or instrumented client) that the TOE sends a Server Key Exchange Message where p Length is consistent with the configured Diffie-Hellman parameter size(s).
+
+* For DTLS 1.3, the evaluator shall verify (through a packet capture or instrumented client) that the TOE sends a Server Key Share Extension Message where the KeyShareServerHello structure contains a KeyShareEntry structure with an opaque key_exchange value whose Length is consistent with the configured Diffie-Hellman parameter size(s).
+
+
+*Test 3 [conditional]:* If RSA key establishment ciphersuites are supported, the evaluator shall repeat this test for each RSA key establishment key size. If any configuration is necessary, the evaluator shall configure the TOE to perform RSA key establishment using a supported key size (e.g. by loading a certificate with the appropriate key size). The evaluator shall attempt a connection using a supported RSA key establishment ciphersuite. The evaluator shall verify (through a packet capture or instrumented client) that the TOE sends a certificate whose modulus is consistent with the configured RSA key size.
+
+*FCS_DTLSS_EXT.1.5*
+
+The evaluator shall establish a connection using a client.  The evaluator shall then modify at least one byte in a record message, and verify that the Server discards the record or terminates the DTLS session.
+
+*FCS_DTLSS_EXT.1.6*
+
+The evaluator shall set up a DTLS connection. The evaluator shall then capture traffic sent from the DTLS Client to the TOE. The evaluator shall retransmit copies of this traffic to the TOE in order to impersonate the DTLS Client. The evaluator shall observe that the TSF does not take action in response to receiving these packets and that the audit log indicates that the replayed traffic was discarded.
+
+*FCS_DTLSS_EXT.1.7*
+
+_Test Objective: To demonstrate that the TOE will not resume a session for which the client failed to complete the handshake (independent of TOE support for session resumption)_
+
+The evaluator shall perform the following tests:
+
+*Test 1 [conditional]:* If the TOE does not support session resumption based on session IDs according to  RFC 5246 (DTLS 1.2), or session tickets according to RFC 5077 (DTLS 1.2) or session resumption according to RFC 8446 (DTLS 1.3), the evaluator shall perform the following test:
+
+... For all supported DTLS versions the client shall send a Client Hello with a zero-length session identifier and with a SessionTicket extension containing a zero-length ticket. A non-zero length session identifier for DTLS 1.3 would result in testing compatibility mode which is not the objective of this test. For DTLS 1.3, the evaluator shall ensure that a 'psk_key_exchange_modes' extension is included in the Client Hello.
+... The client verifies the server does not send a NewSessionTicket handshake message (at any point in the handshake).
+... The client verifies the Server Hello message contains a zero-length session identifier. For DTLS 1.2 the client could alternatively pass the following steps (not applicable for DTLS 1.3):
+
+Note: The following steps are only performed if the ServerHello message contains a non-zero length SessionID.
+... The client completes the DTLS handshake, captures the SessionID from the ServerHello.
+... The client sends a ClientHello containing the SessionID captured in step d). This can be done e.g. by keeping the DTLS session in step d) open or start a new DTLS session using the SessionID captured in step d).
+... The client verifies the TOE (1) implicitly rejects the SessionID by sending a ServerHello containing a different SessionID and by performing a full handshake (as shown into shown in figure 1 of RFC 4346 or RFC 5246), or (2) terminates the connection in some way that prevents the flow of application data.
+
+Remark: If multiple contexts are supported for session resumption, the session ID or session ticket may be obtained in one context for resumption in another context. It is possible that one or more contexts may only permit the construction of sessions to be reused in other contexts but not actually permit resumption themselves. For contexts which do not permit resumption, the evaluator is required to verify this behaviour subject to the description provided in the TSS. It is not mandated that the session establishment and session resumption share context. For example, it is acceptable for a control channel to establish and application channel to resume the session.
+
+*Test 2 [conditional]:* If the TOE supports session resumption using session IDs according to RFC 5246 (TLS 1.2), the evaluator shall perform the following steps (note that for each of these tests, it is not necessary to perform the test case for each supported version of TLS):
+
+... The evaluator shall conduct a successful handshake and capture the TOE-generated session ID in the Server Hello message. The evaluator shall then initiate a new DTLS connection and send the previously captured session ID to show that the TOE resumed the previous session by responding with ServerHello containing the same SessionID immediately followed by ChangeCipherSpec and Finished messages (as shown in figure 2 of RFC 4346 or RFC 5246). When the session is resumed, the evaluator shall verify on the DTLS Client used for performing this test, that the TOE (DTLS Server) has not advertised support for the early data extension.
+... The evaluator shall initiate a handshake and capture the TOE-generated session ID in the Server Hello message. The evaluator shall then, within the same handshake, generate or force an unencrypted fatal Alert message immediately before the client would otherwise send its ChangeCipherSpec message thereby disrupting the handshake. The evaluator shall then initiate a new Client Hello using the previously captured session ID, and verify that the server (1) implicitly rejects the session ID by sending a ServerHello containing a different SessionID and performing a full handshake (as shown in figure 1 of RFC 4346 or RFC 5246), or (2) terminates the connection in some way that prevents the flow of application data.
++
+Remark: If multiple contexts are supported for session resumption, for each of the above test cases, the session ID may be obtained in one context for resumption in another context. There is no requirement that the session ID be obtained and replayed within the same context subject to the description provided in the TSS. All contexts that can reuse a session ID constructed in another context must be tested. It is not mandated that the session establishment and session resumption share context. For example, it is acceptable for a control channel to establish and application channel to resume the session.
+
+*Test 3 [conditional]:* If the TOE supports session tickets according to RFC 5077 (supported only by DTLS 1.2), the evaluator shall carry out the following steps (note that for each of these tests, it is not necessary to perform the test case for each supported version of DTLS):
+[lowerroman]
+... The evaluator shall permit a successful DTLS handshake to occur in which a session ticket is exchanged with the non-TOE client. The evaluator shall then attempt to correctly reuse the previous session by sending the session ticket in the ClientHello. The evaluator shall confirm that the TOE responds with a ServerHello with an empty SessionTicket extension, NewSessionTicket, ChangeCipherSpec and Finished messages (as seen in figure 2 of RFC 5077). When the session is resumed, the evaluator shall verify on the DTLS Client used for performing this test, that the TOE (DTLS Server) has not advertised support for the early data extension.
+... The evaluator shall permit a successful DTLS handshake to occur in which a session ticket is exchanged with the non-TOE client. The evaluator shall then modify the session ticket and send it as part of a new Client Hello message. The evaluator shall confirm that the TOE either (1) implicitly rejects the session ticket by performing a full handshake (as shown in figure 3 or 4 of RFC 5077), or (2) terminates the connection in some way that prevents the flow of application data.
++
+Remark: If multiple contexts are supported for session resumption, for each of the above test cases, the session ticket may be obtained in one context for resumption in another context. There is no requirement that the session ticket be obtained and replayed within the same context subject to the description provided in the TSS. All contexts that can reuse a session ticket constructed in another context must be tested. It is not mandated that the session establishment and session resumption share context. For example, it is acceptable for a control channel to establish and application channel to resume the session.
+
+*Test 4 [conditional]:* If the TOE supports session resumption according to RFC 8446 (supported only by DTLS 1.3), the evaluator shall carry out the following steps:
+
+... The evaluator shall permit a successful DTLS handshake to occur in which a session ticket is exchanged with the non-TOE client.  The evaluator shall then attempt to correctly reuse the previous session by sending the pre-shared key in the ClientHello. The evaluator shall confirm that the TOE responds similarly to figure 3 of RFC 8446 after successfully reusing the pre-shared-key to resume the session. Specifically, the server must not send back a Certificate message if the session is correctly resumed. When the session is resumed, the evaluator shall verify on the DTLS Client used for performing this test, that the TOE (DTLS Server) has not advertised support for the early data extension.
+... The evaluator shall permit a successful DTLS handshake to occur in which a session ticket is exchanged with the non-TOE client.  The evaluator shall then modify the pre-shared key and send it as part of a new Client Hello message.  The evaluator shall confirm that the TOE either (1) implicitly rejects the session ticket by performing a full handshake, or (2) terminates the connection in some way that prevents the flow of application data.
+... The evaluator shall permit a successful DTLS handshake to occur in which a session ticket is exchanged with the non-TOE client.  The evaluator shall then force the non-TOE client to attempt to establish a new connection using the previous session ticket material as a pre-shared key, but set psk_key_exchange_modes with a value of psk_ke in the Client Hello message and omit the psk_ke_dhe.  The evaluator shall confirm that the TOE either (1) implicitly rejects the session ticket by performing a full handshake, or (2) terminates the connection in some way that prevents the flow of application data.
+
+*FCS_DTLSS_EXT.1.8*
+
+If the TSF provides the ability of configuring the list of supported ciphersuites, the evaluator shall establish a DTLS connection using one of the possible configurations of the list of supported ciphersuites. The evaluator shall then change the configuration and repeat the test. The evaluator shall verify that the behavior of the TOE has changed according to the modification of the list of ciphers. This test shall be repeated for all supported DTLS versions. If the TSF does not provide the ability of configuring the list of supported ciphersuites, this test shall be omitted.
+
+*FCS_DTLSS_EXT.1.9*
+
+According to RFC 8446 Section 4.2.10, a PSK is required to use the early data extension. As NDcPP only allows the use of PSK in conjunction with session resumption, a NDcPP conformant TOE which acts as DTLS Server cannot use the early data extension if session resumption is not supported. For TOEs that do not support session resumption, execution of test FCS_DTLSS_EXT.1.7 Test 1 is regarded as sufficient that the TOE does not support the early data extension. For TOEs that support session resumption, FCS_DTLSS_EXT.1.7 Test 2(i), 3(i) or 4(i) (depending on the supported DTLS versions and the way session resumption is implemented) ensure that the TOE does not support the early data extension.
+
+*FCS_DTLSS_EXT.1.11*
+
+*Test 1 [conditional]:* If "support secure renegotiation..." is selected, the evaluator shall use a network packet analyzer/sniffer to capture a DTLS 1.2 handshake between the two DTLS endpoints. The evaluator shall verify that the “renegotiation_info” extension is included in the ServerHello message.
+
+*Test 2 [conditional]:* If "support secure renegotiation..." is selected, the evaluator shall perform a DTLS 1.2 handshake and modify the length portion of the field in the ClientHello message in the initial handshake to be non-zero. The evaluator shall verify that the TOE DTLS server sends a failure and terminates the connection. The evaluator shall verify that a properly formatted field results in a successful DTLS connection.
+
+*Test 3 [conditional]:* If "support secure renegotiation..." is selected, the evaluator shall perform a DTLS 1.2 handshake and modify the "client_verify_data" or "server_verify_data" value in the ClientHello message received during secure renegotiation. The evaluator shall verify that the TOE DTLS server terminates the connection.
+
+*Test 4 [conditional]:* If "reject...renegotiation attemps" is selected, then for each selected DTLS version, the evaluator shall follow the operational guidance as necessary to configure the TSF to negotiate the version and reject renegotiation. The evaluator shall initiate a valid initial session for the specified version, send a valid ClientHello on the non-renegotiable DTLS channel, and observe that the TSF terminates the session.
+
+Note: It is preferred that the TSF sends a fatal error alert message (e.g., unexpected message) in response to this, but it is acceptable that the TSF terminates the connection silently (i.e., without sending a fatal error alert). +
+

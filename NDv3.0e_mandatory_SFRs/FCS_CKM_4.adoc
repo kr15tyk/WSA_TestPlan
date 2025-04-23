@@ -1,0 +1,4 @@
+=== FCS_CKM.4 Cryptographic Key Destruction
+
+There are no test requirements for this SFR. +
+

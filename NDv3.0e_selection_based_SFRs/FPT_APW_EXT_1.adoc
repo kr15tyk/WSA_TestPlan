@@ -1,0 +1,4 @@
+=== FPT_APW_EXT.1 Protection of Administrator Passwords
+
+There are no test requirements for this SFR. +
+

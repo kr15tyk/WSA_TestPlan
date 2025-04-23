@@ -1,0 +1,38 @@
+=== FCS_COP.1/SigGen Cryptographic Operation (Signature Generation and Verification
+
+*ECDSA Algorithm Tests*
+
+*_ECDSA FIPS 186-4 Signature Generation Test_*
+
+For each supported NIST curve (i.e., P-256, P-384 and P-521) and SHA function pair, the evaluator shall generate 10 1024-bit long messages and obtain for each message a public key and the resulting signature values R and S. To determine correctness, the evaluator shall use the signature verification function of a known good implementation.
+
+*_ECDSA FIPS 186-4 Signature Verification Test_*
+
+For each supported NIST curve (i.e., P-256, P-384 and P-521) and SHA function pair, the evaluator shall generate a set of 10 1024-bit message, public key and signature tuples and modify one of the values (message, public key or signature) in five of the 10 tuples. The evaluator shall obtain in response a set of 10 PASS/FAIL values.
+
+*EDDSA Algorithm Tests*
+
+*_EDDSA FIPS 186-5 Signature Generation Test_*
+
+The evaluator shall use the Ed25519 curve and the SHA-512 function pair to generate signatures for 10, 1024-bit long messages, and obtain for each message, a public key and the resulting signature values R and S. To determine correctness, the evaluator shall use the signature verification function of a known good implementation.
+
+The evaluator shall use the Ed25519 curve and the SHA-512 function pair to generate signatures for 10, 1024-bit long messages. The first of these 10 messages will be unique and the subsequent 9 messages shall be derived from the first message by flipping individual bits in the original message. For each of these messages, obtain a public key and the resulting signature values R and S. The evaluator shall verify that the resulting signature values are distinct. Furthermore, to determine correctness, the evaluator shall use the signature verification function of a known good implementation.
+
+*_EDDSA FIPS 186-5 Signature Verification Test_*
+
+The evaluator shall use the Ed25519 curve and the SHA-512 function to generate a set of 10 1024-bit messages, public key and signature tuples and modify one of the values (message, public key or signature) in five of the 10 tuples. The evaluator shall obtain in response a set of 10 PASS/FAIL values.
+
+*RSA Signature Algorithm Tests*
+
+*_Signature Generation Test_*
+
+The evaluator generates or obtains 10 messages for each modulus size/SHA combination supported by the TOE. The TOE generates and returns the corresponding signatures.
+
+The evaluator shall verify the correctness of the TOE’s signature using a trusted reference implementation of the signature verification algorithm and the associated public keys to verify the signatures.
+
+*_Signature Verification Test_*
+
+For each modulus size/hash algorithm selected, the evaluator shall generate a modulus and three associated key pairs, (_d_, _e_). Each private key _d_ is used to sign six pseudorandom messages each of 1024 bits using a trusted reference implementation of the signature generation algorithm. Some of the public keys, _e_, messages, or signatures are altered so that signature verification should fail. For both the set of original messages and the set of altered messages: the modulus, hash algorithm, public key _e_ values, messages, and signatures are forwarded to the TOE, which then attempts to verify the signatures and returns the verification results.
+
+The evaluator shall verify that the TOE confirms correct signatures on the original messages and detects the errors introduced in the altered messages. +
+

@@ -1,0 +1,12 @@
+=== FTP_TRP.1/Admin Trusted Path
+
+The evaluator shall perform the following tests:
+
+*Test 1:* The evaluators shall ensure that communications using each specified (in the guidance documentation) remote administration method is tested during the course of the evaluation, setting up the connections as described in the guidance documentation and ensuring that communication is successful.
+
+*Test 2:* The evaluator shall ensure, for each communication channel, the channel data is not sent in plaintext.
+
+Further assurance activities are associated with the specific protocols.
+
+For distributed TOEs the evaluator shall perform tests on all TOE components according to the mapping of trusted paths to TOE components in the Security Target. +
+

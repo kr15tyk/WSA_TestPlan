@@ -1,0 +1,4 @@
+=== FMT_SMR.2 Restrictions on Security Roles
+
+In the course of performing the testing activities for the evaluation, the evaluator shall use all supported interfaces, although it is not necessary to repeat each test involving an administrative action with each interface. The evaluator shall ensure, however, that each supported method of administering the TOE that conforms to the requirements of this cPP be tested; for instance, if the TOE can be administered through a local hardware interface; SSH, if the TSF shall be validated against the Functional Package for Secure Shell referenced in section 2.2 of the cPP; and TLS/HTTPS; then all three methods of administration must be exercised during the evaluation team’s test activities. +
+

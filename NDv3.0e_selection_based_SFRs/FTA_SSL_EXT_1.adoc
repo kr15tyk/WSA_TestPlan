@@ -1,0 +1,6 @@
+=== FTA_SSL_EXT.1 TSF-initiated Session Locking
+
+The evaluator shall perform the following test:
+
+*Test 1:* The evaluator follows the guidance documentation to configure several different values for the inactivity time period referenced in the component. For each period configured, the evaluator establishes a local interactive session with the TOE. The evaluator then observes that the session is either locked or terminated after the configured time period. If locking was selected from the component, the evaluator then ensures that re-authentication is needed when trying to unlock the session. +
+

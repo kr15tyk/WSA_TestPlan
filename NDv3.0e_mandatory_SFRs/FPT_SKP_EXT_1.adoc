@@ -1,0 +1,4 @@
+=== FPT_SKP_EXT.1 Protection of TSF Data (for Reading of all Symmetric Keys)
+
+There are no test requirements for this SFR. +
+

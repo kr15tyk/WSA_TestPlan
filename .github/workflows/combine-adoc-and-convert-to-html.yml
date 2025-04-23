@@ -1,0 +1,40 @@
+name: Combine Asciidoc, Convert to HTML, and Commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Combine Asciidoc files
+        run: |
+          cat **/*.adoc > combined-testplan.adoc
+
+      - name: Install Asciidoctor
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y asciidoctor
+
+      - name: Convert Asciidoc to HTML
+        run: |
+          asciidoctor -o testplan.html combined-testplan.adoc
+
+      - name: Commit HTML file
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Add generated HTML file
+          commit_user_name: GitHub Actions
+          commit_user_email: actions@github.com
+          file_pattern: testplan.html
+
+      - name: Commit adoc file
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Add generated adoc file
+          commit_user_name: GitHub Actions
+          commit_user_email: actions@github.com
+          file_pattern: combined-testplan.adoc
